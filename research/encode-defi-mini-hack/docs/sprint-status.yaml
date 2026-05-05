@@ -1,167 +1,170 @@
 project: defi-risk-mcp
 hackathon: encode-defi-mini-hack
-deadline: 2026-05-08T17:00:00Z  # Demo Day (verify exact submission cutoff Day 1)
+deadline: 2026-05-08 17:00:00+00:00
 demo_day: 2026-05-08
 research_folder: /home/ali/Desktop/workspace/research/encode-defi-mini-hack/
 build_folder: /home/ali/Desktop/workspace/builds/defi-risk-mcp/
-repo: ""                           # filled by orchestrator Phase 1
-thread_surface: ""                 # telegram or discord — filled by orchestrator Phase 1
-thread_chat_id: ""                 # filled by orchestrator Phase 1
-thread_topic_id: ""                # filled by orchestrator Phase 1
-thread_anchor: ""                  # root message ID — filled by orchestrator Phase 1
-demo_video_url: ""                 # filled by story-demo-recording
-landing_url: ""                    # filled by story-landing-page (Vercel preview)
-npm_package: ""                    # filled by story-readme-and-publish (e.g. @defi-risk/mcp)
-submission_url: ""                 # filled by story-encode-submission
-
+repo: https://github.com/Alike001/defi-risk-mcp
+thread_surface: ''
+thread_chat_id: ''
+thread_topic_id: ''
+thread_anchor: ''
+demo_video_url: ''
+landing_url: ''
+npm_package: ''
+submission_url: ''
 epics:
-  - id: epic-1
-    title: "Epic 1 — Core Tools"
-    status: PENDING                # PENDING | IN_PROGRESS | COMPLETE
-    estimated_hours: 8
-    day: 1
-  - id: epic-2
-    title: "Epic 2 — Discovery + Index Integration"
-    status: PENDING
-    estimated_hours: 7
-    day: 2
-  - id: epic-3
-    title: "Epic 3 — Polish + Submit"
-    status: PENDING
-    estimated_hours: 7
-    day: 3
-
+- id: epic-1
+  title: Epic 1 — Core Tools
+  status: IN_PROGRESS
+  estimated_hours: 8
+  day: 1
+- id: epic-2
+  title: Epic 2 — Discovery + Index Integration
+  status: PENDING
+  estimated_hours: 7
+  day: 2
+- id: epic-3
+  title: Epic 3 — Polish + Submit
+  status: PENDING
+  estimated_hours: 7
+  day: 3
 stories:
-  # Epic 1 — Core Tools
-  - id: story-scaffold-mcp-server
-    epic: epic-1
-    status: PENDING
-    estimated_hours: 1.5
-    depends_on: []
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-tool-get-position-risk
-    epic: epic-1
-    status: PENDING
-    estimated_hours: 2
-    depends_on: [story-scaffold-mcp-server]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-tool-simulate-tx-risk
-    epic: epic-1
-    status: PENDING
-    estimated_hours: 2
-    depends_on: [story-scaffold-mcp-server]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-tool-explain-protocol-risk
-    epic: epic-1
-    status: PENDING
-    estimated_hours: 1.5
-    depends_on: [story-scaffold-mcp-server]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-claude-desktop-integration
-    epic: epic-1
-    status: PENDING
-    estimated_hours: 1
-    depends_on: [story-tool-get-position-risk, story-tool-simulate-tx-risk, story-tool-explain-protocol-risk]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-
-  # Epic 2 — Discovery + Index Integration
-  - id: story-tool-get-recent-exploits
-    epic: epic-2
-    status: PENDING
-    estimated_hours: 1.5
-    depends_on: [story-scaffold-mcp-server]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-tool-discover-yields-by-intent
-    epic: epic-2
-    status: PENDING
-    estimated_hours: 3
-    depends_on: [story-scaffold-mcp-server]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-fallback-discovery
-    epic: epic-2
-    status: PENDING
-    estimated_hours: 1
-    depends_on: [story-tool-discover-yields-by-intent]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-claude-desktop-three-prompts
-    epic: epic-2
-    status: PENDING
-    estimated_hours: 1.5
-    depends_on:
-      - story-tool-get-position-risk
-      - story-tool-simulate-tx-risk
-      - story-tool-explain-protocol-risk
-      - story-tool-get-recent-exploits
-      - story-tool-discover-yields-by-intent
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-
-  # Epic 3 — Polish + Submit
-  - id: story-landing-page
-    epic: epic-3
-    status: PENDING
-    estimated_hours: 3
-    depends_on: []                  # parallel-able from Day 1
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-readme-and-publish
-    epic: epic-3
-    status: PENDING
-    estimated_hours: 1.5
-    depends_on: [story-claude-desktop-three-prompts]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-demo-recording
-    epic: epic-3
-    status: PENDING
-    estimated_hours: 1
-    depends_on: [story-claude-desktop-three-prompts]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-anti-slop-audit
-    epic: epic-3
-    status: PENDING
-    estimated_hours: 0.5
-    depends_on: [story-landing-page]
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-  - id: story-encode-submission
-    epic: epic-3
-    status: PENDING
-    estimated_hours: 0.5
-    depends_on:
-      - story-readme-and-publish
-      - story-demo-recording
-      - story-anti-slop-audit
-    issue_url: ""
-    pr_url: ""
-    merged_at: ""
-
-# Hard cuts (in priority order, applied if behind schedule)
+- id: story-scaffold-mcp-server
+  epic: epic-1
+  status: COMPLETE
+  estimated_hours: 1.5
+  depends_on: []
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/1
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/15
+  merged_at: '2026-05-05T21:50:09Z'
+- id: story-tool-get-position-risk
+  epic: epic-1
+  status: PENDING
+  estimated_hours: 2
+  depends_on:
+  - story-scaffold-mcp-server
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/2
+  pr_url: ''
+  merged_at: ''
+- id: story-tool-simulate-tx-risk
+  epic: epic-1
+  status: PENDING
+  estimated_hours: 2
+  depends_on:
+  - story-scaffold-mcp-server
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/3
+  pr_url: ''
+  merged_at: ''
+- id: story-tool-explain-protocol-risk
+  epic: epic-1
+  status: PENDING
+  estimated_hours: 1.5
+  depends_on:
+  - story-scaffold-mcp-server
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/4
+  pr_url: ''
+  merged_at: ''
+- id: story-claude-desktop-integration
+  epic: epic-1
+  status: PENDING
+  estimated_hours: 1
+  depends_on:
+  - story-tool-get-position-risk
+  - story-tool-simulate-tx-risk
+  - story-tool-explain-protocol-risk
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/5
+  pr_url: ''
+  merged_at: ''
+- id: story-tool-get-recent-exploits
+  epic: epic-2
+  status: PENDING
+  estimated_hours: 1.5
+  depends_on:
+  - story-scaffold-mcp-server
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/6
+  pr_url: ''
+  merged_at: ''
+- id: story-tool-discover-yields-by-intent
+  epic: epic-2
+  status: PENDING
+  estimated_hours: 3
+  depends_on:
+  - story-scaffold-mcp-server
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/7
+  pr_url: ''
+  merged_at: ''
+- id: story-fallback-discovery
+  epic: epic-2
+  status: PENDING
+  estimated_hours: 1
+  depends_on:
+  - story-tool-discover-yields-by-intent
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/8
+  pr_url: ''
+  merged_at: ''
+- id: story-claude-desktop-three-prompts
+  epic: epic-2
+  status: PENDING
+  estimated_hours: 1.5
+  depends_on:
+  - story-tool-get-position-risk
+  - story-tool-simulate-tx-risk
+  - story-tool-explain-protocol-risk
+  - story-tool-get-recent-exploits
+  - story-tool-discover-yields-by-intent
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/9
+  pr_url: ''
+  merged_at: ''
+- id: story-landing-page
+  epic: epic-3
+  status: PENDING
+  estimated_hours: 3
+  depends_on: []
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/10
+  pr_url: ''
+  merged_at: ''
+- id: story-readme-and-publish
+  epic: epic-3
+  status: PENDING
+  estimated_hours: 1.5
+  depends_on:
+  - story-claude-desktop-three-prompts
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/11
+  pr_url: ''
+  merged_at: ''
+- id: story-demo-recording
+  epic: epic-3
+  status: PENDING
+  estimated_hours: 1
+  depends_on:
+  - story-claude-desktop-three-prompts
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/12
+  pr_url: ''
+  merged_at: ''
+- id: story-anti-slop-audit
+  epic: epic-3
+  status: PENDING
+  estimated_hours: 0.5
+  depends_on:
+  - story-landing-page
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/13
+  pr_url: ''
+  merged_at: ''
+- id: story-encode-submission
+  epic: epic-3
+  status: PENDING
+  estimated_hours: 0.5
+  depends_on:
+  - story-readme-and-publish
+  - story-demo-recording
+  - story-anti-slop-audit
+  issue_url: https://github.com/Alike001/defi-risk-mcp/issues/14
+  pr_url: ''
+  merged_at: ''
 hard_cuts:
-  - story-fallback-discovery        # inline try/fallback in main tool instead
-  - story-tool-explain-protocol-risk  # cut to 4 tools if Day 1 short
-  - story-tool-get-recent-exploits  # cut if Day 2 short
-  - story-anti-slop-audit           # accept landing as-is if Day 3 short
-  - story-landing-page              # ship README-only if visual cuts can't pass audit
+- story-fallback-discovery
+- story-tool-explain-protocol-risk
+- story-tool-get-recent-exploits
+- story-anti-slop-audit
+- story-landing-page
