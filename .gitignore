@@ -1,0 +1,22 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.local
+.env.*.local
+!.env.example
+
+*.log
+.DS_Store
+.vscode/
+.idea/
+
+.claude/last-review.json
+.claude/.deadline
+.claude/.story-type
+
+# Mac filesystem metadata noise
+._*
+
+# Worktrees
+../worktrees/

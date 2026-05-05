@@ -1,0 +1,56 @@
+{
+  "name": "@defi-risk/mcp",
+  "version": "0.1.0",
+  "description": "MCP server: synthesizes DeFi risk across audits, exploits, oracles, MEV. For Claude Desktop and any MCP-compliant agent.",
+  "license": "MIT",
+  "author": "Hammed Ali Oyeleye <ajweb3dev@gmail.com> (https://github.com/Alike001)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alike001/defi-risk-mcp.git"
+  },
+  "homepage": "https://github.com/Alike001/defi-risk-mcp#readme",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "defi",
+    "claude",
+    "anthropic",
+    "risk",
+    "agent",
+    "ethereum"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "defi-risk-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "data",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check src",
+    "format": "biome format --write src",
+    "prepublishOnly": "pnpm build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^20.16.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "viem": "^2.21.0",
+    "zod": "^3.23.0"
+  }
+}

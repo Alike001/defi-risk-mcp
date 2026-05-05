@@ -1,0 +1,45 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Reject placeholder tests
+        run: |
+          if grep -q '"test":.*placeholder' package.json; then
+            echo "❌ package.json has placeholder test script"
+            exit 1
+          fi
+          if ! find . -path ./node_modules -prune -o \
+              \( -name '*.test.ts' -o -name '*.test.tsx' -o -name '*.spec.ts' -o -name '*.spec.tsx' \
+                 -o -name '*.test.js' -o -name '*.spec.js' -o -path '*/__tests__/*' \) -print | grep -q .; then
+            echo "❌ no test files found — story PRs must include tests"
+            exit 1
+          fi
+
+      - name: Type-check
+        run: pnpm exec tsc --noEmit
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm run build
