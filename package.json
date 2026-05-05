@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "MCP server: synthesizes DeFi risk across audits, exploits, oracles, MEV. For Claude Desktop and any MCP-compliant agent.",
   "license": "MIT",
-  "author": "Hammed Ali Oyeleye <ajweb3dev@gmail.com> (https://github.com/Alike001)",
+  "author": "Alike001 Hammed Ali Oyeleye <hammedoye10@gmail.com> (https://github.com/Alike001)",
   "repository": {
     "type": "git",
     "url": "https://github.com/Alike001/defi-risk-mcp.git"
@@ -31,7 +31,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && chmod +x dist/index.js",
     "dev": "tsc -p tsconfig.json --watch",
     "test": "vitest run",
     "test:watch": "vitest",
