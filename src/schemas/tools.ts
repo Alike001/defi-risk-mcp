@@ -13,6 +13,7 @@
 import { z } from 'zod';
 import {
   SUPPORTED_CHAINS,
+  exploitFeedSchema,
   protocolNotFoundErrorSchema,
   protocolRiskProfileSchema,
   riskScoreSchema,
@@ -126,3 +127,49 @@ export const explainProtocolRiskOutputSchema = protocolRiskProfileSchema;
 export const explainProtocolRiskErrorSchema = protocolNotFoundErrorSchema;
 
 export type ExplainProtocolRiskOutput = z.infer<typeof explainProtocolRiskOutputSchema>;
+
+/* ------------------------------------------------------------------------- */
+/* get_recent_exploits                                                        */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Input shape for `get_recent_exploits`. Two args:
+ *   - `time_window_days` (1..365) — how far back to look. Default 30 in the
+ *     wrapper; the schema enforces a hard ceiling so a runaway LLM call cannot
+ *     turn the tool into an unbounded scrape.
+ *   - `chain` (optional) — case-insensitive chain name. The tool maps common
+ *     aliases (eth/ethereum, arb/arbitrum, op/optimism, polygon/matic,
+ *     bsc/bnb, base) before filtering.
+ *
+ * Note: this is intentionally NOT constrained to `SUPPORTED_CHAINS` from
+ * `domain.ts`. Exploit feeds cover chains beyond our position/simulation
+ * surface (Fantom, Avalanche, Solana, etc.) and the chain filter is a
+ * read-only narrowing — accepting a free-form string lets users filter
+ * by any chain Rekt mentions without a domain-schema bump.
+ */
+export const getRecentExploitsInputShape = {
+  time_window_days: z
+    .number()
+    .int()
+    .min(1)
+    .max(365)
+    .describe(
+      'Days to look back from now (1..365). Defaults to 30 if omitted by the caller wrapper.',
+    ),
+  chain: z
+    .string()
+    .min(1)
+    .optional()
+    .describe(
+      'Optional case-insensitive chain filter. Accepts canonical names (ethereum, arbitrum, base, optimism, polygon, bsc, avalanche, fantom, solana) and common aliases (eth, arb, op, matic, bnb).',
+    ),
+} as const;
+
+export const getRecentExploitsInputSchema = z.object(getRecentExploitsInputShape);
+
+export type GetRecentExploitsInput = z.infer<typeof getRecentExploitsInputSchema>;
+
+/** Output is the canonical ExploitFeed shape from `domain.ts`. */
+export const getRecentExploitsOutputSchema = exploitFeedSchema;
+
+export type GetRecentExploitsOutput = z.infer<typeof getRecentExploitsOutputSchema>;
