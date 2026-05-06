@@ -18,9 +18,21 @@
  *   2. `@indexnetwork/cli` shell-out via `child_process.spawn` — what this file
  *      implements. Calls `index opportunity discover "<query>" --json` and
  *      parses the `{success, data, error}` envelope the CLI emits.
- *   3. DefiLlama Yields fallback — implemented inline in
- *      `tools/discoverYieldsByIntent.ts` (story-fallback-discovery #8 will
- *      refactor this into a clean router).
+ *   3. Brave Search REST + DefiLlama Yields fallback — implemented in
+ *      `lib/discovery/{bravePath,defillamaFloor,router}.ts` after the
+ *      story-fallback-discovery (#8) refactor.
+ *
+ * After story #8: this file is the underlying CLI bridge. The discovery
+ * router consumes it through `lib/discovery/indexPath.ts` (the thin path
+ * adapter) — not directly. We keep this file rather than re-exporting from
+ * `indexPath.ts` because:
+ *   (a) `IndexNetworkNotConfiguredError` + the typed `IndexOpportunity` shape
+ *       are imported by both the path adapter AND the existing
+ *       `discoverYieldsByIntent.test.ts` (story #7) — back-compat.
+ *   (b) The spawn / stdout-buffer / SIGTERM logic is non-trivial; isolating
+ *       it here means `lib/discovery/indexPath.ts` stays under 100 LOC.
+ *   (c) If a future story decides to swap the CLI for a hypothetical
+ *       resurrected SDK, the bridge changes; the path adapter does not.
  *
  * Why `index opportunity discover` rather than `index intent create`:
  *   - `intent create` writes a persistent signal into the user's Index
