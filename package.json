@@ -17,21 +17,24 @@
     "anthropic",
     "risk",
     "agent",
-    "ethereum"
+    "ethereum",
+    "viem"
   ],
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "defi-risk-mcp": "dist/index.js"
+    "defi-risk-mcp": "dist/index.js",
+    "defi-risk-mcp-install": "dist/install.js"
   },
   "files": [
     "dist",
-    "data",
+    "data/audits",
+    "data/composability",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json && chmod +x dist/index.js",
+    "build": "tsc -p tsconfig.json && chmod +x dist/index.js dist/install.js",
     "dev": "tsc -p tsconfig.json --watch",
     "test": "vitest run",
     "test:watch": "vitest",
