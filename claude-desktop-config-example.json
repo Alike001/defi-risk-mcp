@@ -1,0 +1,39 @@
+{
+  "_comment_paths": [
+    "Paste the `mcpServers.defi-risk` block below into your Claude Desktop config.",
+    "macOS:   ~/Library/Application Support/Claude/claude_desktop_config.json",
+    "Windows: %APPDATA%\\Claude\\claude_desktop_config.json",
+    "If the file does not exist yet, create it with the full JSON object below."
+  ],
+  "_comment_invocation": [
+    "Two invocation patterns are supported.",
+    "(A) npx — recommended for end users; no clone required.",
+    "    Replace this block's `command` + `args` with:",
+    "      \"command\": \"npx\",",
+    "      \"args\": [\"-y\", \"-p\", \"@defi-risk/mcp\", \"defi-risk-mcp\"]",
+    "(B) Local build — recommended for contributors. The shipped example uses",
+    "    this pattern; replace ABSOLUTE_PATH_TO_REPO with the path on your box."
+  ],
+  "_comment_env": [
+    "All env keys mirror .env.example. Required: ALCHEMY_API_KEY, ETHERSCAN_API_KEY.",
+    "Optional: TENDERLY_USER, TENDERLY_PROJECT, TENDERLY_ACCESS_KEY (simulate_tx_risk),",
+    "INDEX_NETWORK_KEY + BRAVE_SEARCH_API_KEY (discover_yields_by_intent fallback).",
+    "Tools missing required keys return a structured `missing_credentials` error",
+    "rather than crashing the server — see docs/INSTALL.md Troubleshooting."
+  ],
+  "mcpServers": {
+    "defi-risk": {
+      "command": "node",
+      "args": ["ABSOLUTE_PATH_TO_REPO/dist/index.js"],
+      "env": {
+        "ALCHEMY_API_KEY": "",
+        "ETHERSCAN_API_KEY": "",
+        "TENDERLY_USER": "",
+        "TENDERLY_PROJECT": "",
+        "TENDERLY_ACCESS_KEY": "",
+        "INDEX_NETWORK_KEY": "",
+        "BRAVE_SEARCH_API_KEY": ""
+      }
+    }
+  }
+}
