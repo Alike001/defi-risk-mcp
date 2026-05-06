@@ -16,17 +16,17 @@ submission_url: ''
 epics:
 - id: epic-1
   title: Epic 1 — Core Tools
-  status: IN_PROGRESS
+  status: COMPLETE
   estimated_hours: 8
   day: 1
 - id: epic-2
   title: Epic 2 — Discovery + Index Integration
-  status: PENDING
+  status: IN_PROGRESS
   estimated_hours: 7
   day: 2
 - id: epic-3
   title: Epic 3 — Polish + Submit
-  status: PENDING
+  status: IN_PROGRESS
   estimated_hours: 7
   day: 3
 stories:
@@ -40,69 +40,69 @@ stories:
   merged_at: '2026-05-05T21:50:09Z'
 - id: story-tool-get-position-risk
   epic: epic-1
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 2
   depends_on:
   - story-scaffold-mcp-server
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/2
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/17
+  merged_at: '2026-05-06T04:32:25Z'
 - id: story-tool-simulate-tx-risk
   epic: epic-1
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 2
   depends_on:
   - story-scaffold-mcp-server
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/3
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/18
+  merged_at: '2026-05-06T04:49:47Z'
 - id: story-tool-explain-protocol-risk
   epic: epic-1
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 1.5
   depends_on:
   - story-scaffold-mcp-server
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/4
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/19
+  merged_at: '2026-05-06T05:40:49Z'
 - id: story-claude-desktop-integration
   epic: epic-1
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 1
   depends_on:
   - story-tool-get-position-risk
   - story-tool-simulate-tx-risk
   - story-tool-explain-protocol-risk
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/5
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/20
+  merged_at: '2026-05-06T05:49:32Z'
 - id: story-tool-get-recent-exploits
   epic: epic-2
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 1.5
   depends_on:
   - story-scaffold-mcp-server
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/6
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/21
+  merged_at: '2026-05-06T06:07:03Z'
 - id: story-tool-discover-yields-by-intent
   epic: epic-2
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 3
   depends_on:
   - story-scaffold-mcp-server
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/7
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/22
+  merged_at: '2026-05-06T06:32:17Z'
 - id: story-fallback-discovery
   epic: epic-2
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 1
   depends_on:
   - story-tool-discover-yields-by-intent
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/8
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/23
+  merged_at: '2026-05-06T06:48:30Z'
 - id: story-claude-desktop-three-prompts
   epic: epic-2
   status: PENDING
@@ -118,21 +118,21 @@ stories:
   merged_at: ''
 - id: story-landing-page
   epic: epic-3
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 3
   depends_on: []
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/10
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/24
+  merged_at: '2026-05-06T07:12:50Z'
 - id: story-readme-and-publish
   epic: epic-3
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 1.5
   depends_on:
   - story-claude-desktop-three-prompts
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/11
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/26
+  merged_at: '2026-05-06T08:11:48Z'
 - id: story-demo-recording
   epic: epic-3
   status: PENDING
@@ -144,13 +144,13 @@ stories:
   merged_at: ''
 - id: story-anti-slop-audit
   epic: epic-3
-  status: PENDING
+  status: COMPLETE
   estimated_hours: 0.5
   depends_on:
   - story-landing-page
   issue_url: https://github.com/Alike001/defi-risk-mcp/issues/13
-  pr_url: ''
-  merged_at: ''
+  pr_url: https://github.com/Alike001/defi-risk-mcp/pull/25
+  merged_at: '2026-05-06T07:47:23Z'
 - id: story-encode-submission
   epic: epic-3
   status: PENDING
