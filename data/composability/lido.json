@@ -1,0 +1,20 @@
+{
+  "protocol": "lido",
+  "depth": 1,
+  "depends_on": [
+    "ethereum-validator-set",
+    "lido-oracle-quorum"
+  ],
+  "downstream_users": [
+    "aave-v3",
+    "morpho",
+    "compound-v3",
+    "spark",
+    "maker",
+    "curve",
+    "balancer",
+    "pendle",
+    "eigenlayer"
+  ],
+  "notes": "wstETH is the most-composed asset in DeFi — collateral on every major lender across every major chain. Lido Oracle quorum reports beacon-chain balances on-chain; quorum compromise is a structural risk vector. stETH market price (Curve / Uniswap / Balancer) is what most downstream protocols use rather than a Chainlink feed."
+}

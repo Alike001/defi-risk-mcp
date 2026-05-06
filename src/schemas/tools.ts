@@ -11,7 +11,13 @@
  */
 
 import { z } from 'zod';
-import { SUPPORTED_CHAINS, riskScoreSchema, txRiskReportSchema } from './domain.js';
+import {
+  SUPPORTED_CHAINS,
+  protocolNotFoundErrorSchema,
+  protocolRiskProfileSchema,
+  riskScoreSchema,
+  txRiskReportSchema,
+} from './domain.js';
 
 /**
  * `health_check` takes no input. Exposing it as an empty raw shape (rather
@@ -85,3 +91,38 @@ export type SimulateTxRiskInput = z.infer<typeof simulateTxRiskInputSchema>;
 export const simulateTxRiskOutputSchema = txRiskReportSchema;
 
 export type SimulateTxRiskOutput = z.infer<typeof simulateTxRiskOutputSchema>;
+
+/* ------------------------------------------------------------------------- */
+/* explain_protocol_risk                                                      */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Input shape for `explain_protocol_risk`. Single string arg — the protocol
+ * slug as it appears in DefiLlama / our local audit cache. Lower-cased.
+ */
+export const explainProtocolRiskInputShape = {
+  protocol_name: z
+    .string()
+    .min(1)
+    .describe(
+      'Protocol slug as used by DefiLlama, e.g. "aave-v3", "morpho", "pendle". Lower-cased.',
+    ),
+} as const;
+
+export const explainProtocolRiskInputSchema = z.object(explainProtocolRiskInputShape);
+
+export type ExplainProtocolRiskInput = z.infer<typeof explainProtocolRiskInputSchema>;
+
+/**
+ * Output schema declared to MCP is the success shape — the `protocol_not_found`
+ * error variant is surfaced via the SDK's `isError: true` response (analogous
+ * to how `simulate_tx_risk` handles missing-credentials), and the structured
+ * error payload is parsed against `protocolNotFoundErrorSchema` separately so
+ * its three-suggestion contract is still enforced.
+ */
+export const explainProtocolRiskOutputSchema = protocolRiskProfileSchema;
+
+/** Re-export the not-found error schema so the tool layer + tests share one source. */
+export const explainProtocolRiskErrorSchema = protocolNotFoundErrorSchema;
+
+export type ExplainProtocolRiskOutput = z.infer<typeof explainProtocolRiskOutputSchema>;

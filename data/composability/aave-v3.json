@@ -1,0 +1,17 @@
+{
+  "protocol": "aave-v3",
+  "depth": 1,
+  "depends_on": [
+    "chainlink-price-feeds"
+  ],
+  "downstream_users": [
+    "gho",
+    "morpho",
+    "yearn",
+    "spark",
+    "1inch",
+    "paraswap",
+    "instadapp"
+  ],
+  "notes": "Aave v3 reads Chainlink for collateral pricing. Downstream: GHO mints from Aave collateral; Morpho-Aave optimizers wrap supply/borrow; flashloan aggregators (1inch, Paraswap) route through Aave."
+}

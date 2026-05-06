@@ -1,0 +1,18 @@
+{
+  "protocol": "ethena",
+  "depth": 1,
+  "depends_on": [
+    "cex-perp-venues",
+    "off-exchange-custodians",
+    "chainlink-price-feeds",
+    "redstone"
+  ],
+  "downstream_users": [
+    "pendle",
+    "morpho",
+    "aave-v3",
+    "uniswap-v3",
+    "curve"
+  ],
+  "notes": "Ethena's USDe is delta-neutral: long spot + short perp on Binance/Bybit/Deribit via off-exchange custody (Copper, Ceffu). USDe and sUSDe are heavily wrapped — Pendle PT-USDe / PT-sUSDe markets, Aave + Morpho list as collateral, Curve / Uniswap host primary liquidity. De-peg risk cascades broadly."
+}

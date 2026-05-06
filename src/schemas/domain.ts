@@ -161,3 +161,117 @@ export const txRiskReportSchema = z.object({
 });
 
 export type TxRiskReport = z.infer<typeof txRiskReportSchema>;
+
+/* ------------------------------------------------------------------------- */
+/* ProtocolRiskProfile — output of `explain_protocol_risk`                    */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * One audit entry. We capture firm + date + url so the MCP client can render
+ * a timeline. Date is an ISO-8601 string ("2024-04-15") or "YYYY-MM" / "YYYY"
+ * for cases where the public report only specifies the month or year.
+ *
+ * URL is required by BDD ("firm + date + url"). When the source markdown
+ * lists a firm without a URL we fall back to the protocol-level source URL
+ * from `code4rena.ts` so the field always parses.
+ */
+export const auditEntrySchema = z.object({
+  firm: z.string().min(1),
+  date: z.string().min(4), // "2024", "2024-06", or "2024-06-15"
+  url: z.string().url(),
+  scope: z.string().nullable(),
+});
+
+export type AuditEntry = z.infer<typeof auditEntrySchema>;
+
+/**
+ * One historical exploit / disclosure. `amount_usd` is a best-effort estimate;
+ * `null` when the loss is non-monetary (e.g. an approval-phishing incident).
+ * `affected_protocol` is set when the exploit hit a *downstream* aggregator
+ * rather than the protocol's own contracts (we annotate explicitly so the LLM
+ * does not falsely attribute Penpie-style aggregator bugs to Pendle, etc.).
+ */
+export const exploitEntrySchema = z.object({
+  date: z.string().min(4),
+  description: z.string().min(10),
+  amount_usd: z.number().min(0).nullable(),
+  source_url: z.string().url().nullable(),
+  affected_protocol: z.string().nullable(),
+});
+
+export type ExploitEntry = z.infer<typeof exploitEntrySchema>;
+
+/**
+ * One recent governance proposal from Snapshot. `status` is whatever Snapshot
+ * returns (typically: "active", "closed", "pending"). We pass it through
+ * lower-cased so downstream rendering can branch deterministically.
+ */
+export const governanceProposalSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  status: z.string().min(1),
+  url: z.string().url(),
+  created: z.number().int().nonnegative(),
+});
+
+export type GovernanceProposal = z.infer<typeof governanceProposalSchema>;
+
+/**
+ * Composability tree. `depends_on` is the set of upstream protocols this
+ * protocol relies on (oracles, lower-level lending markets, restaking primitives).
+ * `downstream_users` is the set of protocols that wrap or compose this one
+ * (LRTs, yield aggregators, leveraged-LP wrappers).
+ *
+ * `depth` is a coarse hop-count for the local map (1 = direct integrations
+ * curated manually; higher values reserved for future graph walks).
+ */
+export const composabilityTreeSchema = z.object({
+  protocol: z.string().min(1),
+  depth: z.number().int().nonnegative(),
+  depends_on: z.array(z.string()),
+  downstream_users: z.array(z.string()),
+  notes: z.string().nullable(),
+});
+
+export type ComposabilityTree = z.infer<typeof composabilityTreeSchema>;
+
+/**
+ * Full ProtocolRiskProfile — the structured output of `explain_protocol_risk`.
+ *
+ * Required fields (per BDD acceptance):
+ *   - audits           : array of {firm, date, url} — at least one entry
+ *   - exploit_history  : array (may be empty if no exploits)
+ *   - oracle_deps      : array of oracle providers in use
+ *   - composability_tree
+ *   - recent_governance : last 5 Snapshot proposals
+ *
+ * Plus a top-level `summary` for the LLM TL;DR and a `sources` array for
+ * citation symmetry with the other tools. We keep `summary` ≥ 50 chars to
+ * match the convention in `riskScoreSchema`.
+ */
+export const protocolRiskProfileSchema = z.object({
+  protocol: z.string().min(1),
+  summary: z.string().min(50),
+  audits: z.array(auditEntrySchema).min(1),
+  exploit_history: z.array(exploitEntrySchema),
+  oracle_deps: z.array(z.string()),
+  composability_tree: composabilityTreeSchema,
+  recent_governance: z.array(governanceProposalSchema).max(5),
+  sources: z.array(z.string().url()).min(1),
+});
+
+export type ProtocolRiskProfile = z.infer<typeof protocolRiskProfileSchema>;
+
+/**
+ * Structured "protocol not found" error shape. Returned in-band from the tool
+ * (rather than thrown) so MCP clients can render the suggestions UI cleanly.
+ */
+export const protocolNotFoundErrorSchema = z.object({
+  status: z.literal('error'),
+  code: z.literal('protocol_not_found'),
+  message: z.string().min(1),
+  /** Three closest known protocols, Levenshtein-ranked. */
+  suggestions: z.array(z.string().min(1)).length(3),
+});
+
+export type ProtocolNotFoundError = z.infer<typeof protocolNotFoundErrorSchema>;
