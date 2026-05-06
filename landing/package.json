@@ -1,0 +1,34 @@
+{
+  "name": "defi-risk-mcp-landing",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Single-scroll landing page for defi-risk-mcp. Built for Encode DeFi Mini Hack 2026.",
+  "scripts": {
+    "dev": "next dev",
+    "prebuild": "bash scripts/check-banned-classes.sh",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint --dir app --dir components",
+    "check:banned": "bash scripts/check-banned-classes.sh"
+  },
+  "dependencies": {
+    "next": "^15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^20.16.10",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^15.1.6",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

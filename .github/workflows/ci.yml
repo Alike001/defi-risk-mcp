@@ -43,3 +43,62 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+  landing:
+    # Path-aware build for the landing/ workspace (Next 15 + Tailwind v4).
+    # Per story-landing-page: extends root CI, only runs on landing changes.
+    # Always runs on push/PR to detect added files; the `changes` filter
+    # gates the install + build steps so unaffected commits stay fast.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect landing changes
+        id: changes
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+          else
+            base="${{ github.event.before }}"
+            head="${{ github.sha }}"
+          fi
+          # Fall back to HEAD~1 when base is empty (force-push, first push, etc.)
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            base="$(git rev-parse HEAD~1 2>/dev/null || git rev-parse HEAD)"
+          fi
+          if git diff --name-only "$base" "$head" 2>/dev/null | grep -qE '^landing/'; then
+            echo "landing=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "landing=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: pnpm/action-setup@v4
+        if: steps.changes.outputs.landing == 'true'
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        if: steps.changes.outputs.landing == 'true'
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: landing/pnpm-lock.yaml
+
+      - name: Install (landing)
+        if: steps.changes.outputs.landing == 'true'
+        run: pnpm --dir landing install --frozen-lockfile
+
+      - name: Banned-classes check (source)
+        if: steps.changes.outputs.landing == 'true'
+        run: bash landing/scripts/check-banned-classes.sh
+
+      - name: Build (landing)
+        if: steps.changes.outputs.landing == 'true'
+        run: pnpm --dir landing build
+
+      - name: Lint (landing)
+        if: steps.changes.outputs.landing == 'true'
+        run: pnpm --dir landing lint
