@@ -78,3 +78,86 @@ export const positionSchema = z.object({
 });
 
 export type Position = z.infer<typeof positionSchema>;
+
+/* ------------------------------------------------------------------------- */
+/* TxRiskReport — output of `simulate_tx_risk`                                */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Three-band MEV verdict. v0 heuristic — see `simulateTxRisk.ts` and the
+ * tool description for the exact rules. Subsequent stories may refine.
+ */
+export const MEV_RISK_BANDS = ['low', 'medium', 'high'] as const;
+export type MevRiskBand = (typeof MEV_RISK_BANDS)[number];
+
+/**
+ * Counterparty = the contract the tx targets (`tx.to`). For known protocols
+ * we set `name` to the canonical DefiLlama label and `audited` from the
+ * curated audit cache; for unknown contracts we set `name` to the address
+ * and `audited` to `false` (do not fabricate a yes-answer for unknowns).
+ */
+export const counterpartySchema = z.object({
+  address: z.string().regex(/^0x[a-fA-F0-9]{40}$/, 'address must be 0x-prefixed 20-byte hex'),
+  name: z.string().min(1),
+  audited: z.boolean(),
+  category: z.string().nullable(),
+});
+
+export type Counterparty = z.infer<typeof counterpartySchema>;
+
+/**
+ * Lightweight portfolio delta hint for the sender (when known). For v0 we
+ * never infer wallets, so this is always `null` for unsigned tx hex (which
+ * has no recoverable from-address) — but the field is reserved so future
+ * stories that accept signed-tx hex or a `from` arg can populate it.
+ */
+export const portfolioAfterSchema = z
+  .object({
+    address: z.string(),
+    /** Free-form deltas, e.g. `{ USDC: -10_000, WETH: +2.7 }`. */
+    deltas: z.record(z.string(), z.number()),
+  })
+  .nullable();
+
+export type PortfolioAfter = z.infer<typeof portfolioAfterSchema>;
+
+/**
+ * Full `TxRiskReport` — the structured output of `simulate_tx_risk`.
+ *
+ * Required fields (per BDD):
+ *   - mev_risk + mev_reasoning
+ *   - slippage_pct (>= 0)
+ *   - counterparty (name, audited)
+ *   - oracle_deps (array — may be empty for AMM swaps)
+ *   - portfolio_after (nullable when wallet unknown)
+ *   - recommendations (array of strings)
+ *
+ * Plus a top-level `summary` so the LLM has a single-paragraph TL;DR and a
+ * `decoded` field carrying the parsed call-data so callers can render the
+ * "what does this tx actually do" UI without re-decoding themselves.
+ */
+export const decodedCallSchema = z.object({
+  function_name: z.string(),
+  // args are heterogeneous (addresses, bigints, tuples). We stringify before
+  // serializing — Zod cannot model the open viem type union without `any`.
+  args: z.array(z.string()),
+  selector: z.string().regex(/^0x[a-fA-F0-9]{8}$/),
+});
+
+export type DecodedCall = z.infer<typeof decodedCallSchema>;
+
+export const txRiskReportSchema = z.object({
+  summary: z.string().min(40),
+  chain: z.enum(SUPPORTED_CHAINS),
+  counterparty: counterpartySchema,
+  decoded: decodedCallSchema.nullable(),
+  mev_risk: z.enum(MEV_RISK_BANDS),
+  mev_reasoning: z.string().min(20),
+  slippage_pct: z.number().min(0),
+  oracle_deps: z.array(z.string()),
+  portfolio_after: portfolioAfterSchema,
+  recommendations: z.array(z.string().min(3)).min(1),
+  sources: z.array(z.string().url()).min(1),
+});
+
+export type TxRiskReport = z.infer<typeof txRiskReportSchema>;
