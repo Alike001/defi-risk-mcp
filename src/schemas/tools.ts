@@ -11,7 +11,7 @@
  */
 
 import { z } from 'zod';
-import { SUPPORTED_CHAINS, riskScoreSchema } from './domain.js';
+import { SUPPORTED_CHAINS, riskScoreSchema, txRiskReportSchema } from './domain.js';
 
 /**
  * `health_check` takes no input. Exposing it as an empty raw shape (rather
@@ -56,3 +56,32 @@ export const getPositionRiskInputShape = {
 export const getPositionRiskOutputSchema = riskScoreSchema;
 
 export type GetPositionRiskOutput = z.infer<typeof getPositionRiskOutputSchema>;
+
+/* ------------------------------------------------------------------------- */
+/* simulate_tx_risk                                                           */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Input shape for `simulate_tx_risk`. Chain matches the same three networks
+ * the rest of the surface supports. `unsigned_tx_hex` accepts a serialized
+ * transaction (legacy or EIP-1559). Per ADR-003 we never sign or broadcast.
+ */
+export const simulateTxRiskInputShape = {
+  chain: z.enum(SUPPORTED_CHAINS).describe('Target chain. One of ethereum, base, arbitrum.'),
+  unsigned_tx_hex: z
+    .string()
+    .regex(/^0x[a-fA-F0-9]+$/, 'must be 0x-prefixed hex')
+    .min(20)
+    .describe(
+      'Serialized transaction hex (legacy or EIP-1559). May be unsigned. The MCP server NEVER signs or broadcasts — simulation only (ADR-003).',
+    ),
+} as const;
+
+export const simulateTxRiskInputSchema = z.object(simulateTxRiskInputShape);
+
+export type SimulateTxRiskInput = z.infer<typeof simulateTxRiskInputSchema>;
+
+/** Output is the canonical TxRiskReport shape from `domain.ts`. */
+export const simulateTxRiskOutputSchema = txRiskReportSchema;
+
+export type SimulateTxRiskOutput = z.infer<typeof simulateTxRiskOutputSchema>;
