@@ -15,23 +15,48 @@
 
 ## Demo
 
-<!-- TODO from #9 — replace placeholder with hero screenshot of Claude Desktop calling the MCP. Captured during story-claude-desktop-three-prompts on a Mac/Windows host. -->
-<!-- TODO from #12 — replace with 90-second demo video link once recorded. -->
+**Prompt:** _"I'm thinking of supplying 10,000 USDC to Aave on Base. What are the risks?"_
 
-> Demo video: _coming soon_ (story #12). <!-- TODO from #12 -->
+Claude calls `get_position_risk` + `explain_protocol_risk` + `get_recent_exploits` + `get_chain_info` and synthesizes — verbatim from a live Claude Code session on Linux:
 
-```text
-You ▸  I'm thinking of supplying 10,000 USDC to Aave on Base. What are the risks?
+> ### Risks of supplying 10,000 USDC to Aave v3 on Base
+>
+> **Protocol risk — LOW**
+> - Audits: 5 reputable firms on record — OpenZeppelin (2022), Trail of Bits (2022), Certora (formal verification, ongoing), SigmaPrime (2023, GHO/v3.1), Code4rena (2022).
+> - Exploit history: 1 historical incident (2022 CRV short attack) — and that was on Aave v2, not v3 — protocol contracts weren't exploited; it was a bad-debt event from an oracle-priced asset that was subsequently frozen. v3 has a clean record.
+> - TVL: ~$14.9B — deep enough that supply/withdraw liquidity is rarely a problem for a $10K position.
+> - Recent Base exploits (90 days): feed returned 0 real incidents.
+>
+> **Oracle risk — MEDIUM** (structural, not Aave-specific)
+> - Aave v3 reads Chainlink for all collateral pricing. A USDC supply position itself isn't directly priced (USDC is the unit of account), but Chainlink failure or stale prices can cause cascading bad-debt that hits the reserve where you're supplying. This is the single biggest non-headline risk.
+>
+> **Chain risk (Base) — MEDIUM**
+> - Sequencer: Base runs a centralized Coinbase sequencer. Outage → no withdrawals or liquidations until restored. A long sequencer halt during a USDC depeg event is the worst case.
+> - Bridge: USDC on Base is native (Circle's CCTP), not a bridge wrapper, so this risk is lower than on chains using lock/mint bridges. Withdrawing back to Ethereum still routes through the standard L2 → L1 7-day exit window if you bypass CCTP.
+>
+> **Asset risk (USDC) — LOW-MEDIUM**
+> - Circle freeze: USDC is freezable at the issuer level. Sanctioned addresses can lose funds outright. Not a behavioral risk for a normal user but worth noting.
+> - Depeg: March 2023 SVB depeg saw USDC trade ~$0.87 briefly. Aave v3 handled this correctly, but it's the historical worst case.
+>
+> **Position-specific risk — LOW**
+> - Utilization spike: if borrow demand spikes, withdraws can queue until utilization drops. For $10K on a multi-billion-dollar reserve, this is a non-issue 99% of the time.
+> - Variable APY: yield is not fixed — can drop quickly if borrow demand softens.
+> - `aBasUSDC` is rebasing (interest accrues to balance). Some downstream protocols don't accept it.
+>
+> **Governance risk — LOW**
+>
+> Recent Aave DAO activity is routine: risk-provider renewal, bug bounty restructure, AAVE buyback pause. No emergency or contentious proposals affecting USDC reserves.
+>
+> **Bottom line**
+>
+> For passive USDC supply, this is one of the lower-risk yields in DeFi. Three things to actually watch:
+> 1. Chainlink USDC/USD feed health (oracle is the real systemic risk)
+> 2. Base sequencer status during any USDC depeg
+> 3. Reserve utilization before sizing up — at $10K it's irrelevant.
 
-Claude (using defi-risk-mcp) ▸
-   • Calls get_position_risk → synthesizes 6 risk dimensions
-   • Calls explain_protocol_risk → audits + exploit chain + governance
-   • Returns: oracle deps (Chainlink, 2 feeds), audit cadence (last 4 mo),
-              counterparty (TVL, governance), MEV exposure (low for supply),
-              composability (rehypothecation), slippage (n/a)
-```
+The full verification log — including prompt #2 (yield discovery → Pendle APXUSD picked correctly) and prompt #3 (caught a drain-pattern transaction with burn-shaped recipient + stale deadline) — lives in [issue #5](https://github.com/Alike001/defi-risk-mcp/issues/5) and [issue #9](https://github.com/Alike001/defi-risk-mcp/issues/9).
 
-<!-- Hero screenshot will replace this code block once Claude Desktop captures are taken on Mac/Windows. -->
+> 📹 90-second demo video: _coming soon_ <!-- TODO from #12 -->
 
 ---
 
