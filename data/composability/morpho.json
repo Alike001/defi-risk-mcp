@@ -1,0 +1,16 @@
+{
+  "protocol": "morpho",
+  "depth": 1,
+  "depends_on": [
+    "chainlink-price-feeds",
+    "uniswap-v3-twap"
+  ],
+  "downstream_users": [
+    "metamorpho-vaults",
+    "gauntlet-vaults",
+    "steakhouse-vaults",
+    "block-analitica-vaults",
+    "instadapp"
+  ],
+  "notes": "Morpho Blue markets accept any oracle adapter — most production markets use Chainlink, some use Uniswap v3 TWAPs. MetaMorpho vaults aggregate Blue markets and inherit underlying-market risk via curator allocation choices."
+}

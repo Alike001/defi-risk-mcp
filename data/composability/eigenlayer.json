@@ -1,0 +1,20 @@
+{
+  "protocol": "eigenlayer",
+  "depth": 1,
+  "depends_on": [
+    "ethereum-validator-set",
+    "lido",
+    "rocket-pool"
+  ],
+  "downstream_users": [
+    "etherfi-weeth",
+    "renzo-ezeth",
+    "kelp-rseth",
+    "puffer-pufeth",
+    "swell-rsweth",
+    "pendle",
+    "morpho",
+    "aave-v3"
+  ],
+  "notes": "EigenLayer accepts native ETH + LST deposits (stETH, rETH) and exposes them to AVS slashing. LRT protocols (ether.fi weETH, Renzo ezETH, Kelp rsETH, Puffer pufETH) wrap EigenLayer points + restaking rewards; LRT tokens are then composed into Pendle PT/YT and lending markets. Risk cascades: AVS slashing → LRT → Pendle/Aave/Morpho holders."
+}

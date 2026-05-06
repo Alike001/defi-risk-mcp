@@ -1,0 +1,16 @@
+{
+  "protocol": "pendle",
+  "depth": 1,
+  "depends_on": [
+    "underlying-yield-tokens",
+    "internal-twap"
+  ],
+  "downstream_users": [
+    "aave-v3",
+    "morpho",
+    "penpie",
+    "equilibria",
+    "stakedao"
+  ],
+  "notes": "Pendle wraps yield-bearing tokens (sUSDe, weETH, ezETH, swETH) into PT/YT pairs and prices them via internal SY/PT TWAP. PT-* tokens are listed as collateral on Aave + Morpho with custom oracle adapters; Penpie / Equilibria are vePENDLE aggregators (note: Penpie was the source of the 2024 $27M aggregator exploit, not Pendle itself)."
+}
