@@ -337,3 +337,108 @@ export const exploitFeedSchema = z.object({
 });
 
 export type ExploitFeed = z.infer<typeof exploitFeedSchema>;
+
+/* ------------------------------------------------------------------------- */
+/* IntentConstraints / YieldCandidate / YieldDiscoveryResult                  */
+/* (output of `discover_yields_by_intent`)                                    */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Discovery source for a yield search. `index_network` means the live Index
+ * Network agent matchmaker produced (or seeded) the candidate set; `fallback`
+ * means we ran the DefiLlama Yields path directly because Index was unset or
+ * errored. The MCP client should surface this so the user understands which
+ * path actually ran (judge-fit signal — see story file).
+ */
+export const YIELD_DISCOVERY_SOURCES = ['index_network', 'fallback'] as const;
+export type YieldDiscoverySource = (typeof YIELD_DISCOVERY_SOURCES)[number];
+
+/**
+ * Structured constraints extracted by the rule-based intent parser. Every
+ * field is optional — the parser produces what it can and the filter applies
+ * each constraint conjunctively. Keeping the shape Zod-validated lets us
+ * round-trip the parsed intent in the response so callers can audit the
+ * parser's interpretation.
+ *
+ * Supported keywords (mirror `intentParser.ts` — keep in sync):
+ *   - APY: `apy > N%`, `apy >= N%`, `> N%`, `>= N%`, `> N` (interpreted as %)
+ *   - chain: `on Base`, `on Arbitrum`, `on Ethereum`
+ *   - asset: `USDC`, `USDT`, `DAI`, `ETH`, `WETH`, `WBTC`, `STETH`
+ *   - audited: `audited`
+ *   - audit window: `audited within last N months`
+ *   - rebase: `no rebase`, `non-rebasing`
+ *   - stable: `stable`, `stablecoin`
+ *   - real yield: `real yield`, `no emissions`, `no inflationary`
+ */
+export const intentConstraintsSchema = z.object({
+  apy_min: z.number().nullable(),
+  chain: z.string().nullable(),
+  asset_symbol: z.string().nullable(),
+  audited_required: z.boolean(),
+  audit_max_age_months: z.number().int().nullable(),
+  no_rebase: z.boolean(),
+  stable_only: z.boolean(),
+  real_yield_only: z.boolean(),
+  /** Free-form keywords the parser recognized (for transparency). */
+  recognized_keywords: z.array(z.string()),
+});
+
+export type IntentConstraints = z.infer<typeof intentConstraintsSchema>;
+
+/**
+ * One yield candidate. `apy` is the headline number (DefiLlama's `apy` field —
+ * apyBase + apyReward when both are present). `real_yield` strips out
+ * inflationary token emissions per the F4 atom — when DefiLlama exposes
+ * `apyBase` we use it; when only `apy` is present we set `real_yield_estimated`
+ * so callers know the value is best-effort.
+ *
+ * `risk_score` is 0–100 with safer = lower. Sort ascending = safest first
+ * (BDD requirement). `why_recommended` is a >=40-char human-readable rationale.
+ */
+export const yieldCandidateSchema = z.object({
+  protocol: z.string().min(1),
+  chain: z.string().min(1),
+  symbol: z.string().min(1),
+  apy: z.number(),
+  real_yield: z.number(),
+  real_yield_estimated: z.boolean(),
+  risk_score: z.number().min(0).max(100),
+  tvl_usd: z.number().min(0),
+  is_stablecoin: z.boolean(),
+  /** DefiLlama's IL-risk verdict, when present. */
+  il_risk: z.string().nullable(),
+  /** DefiLlama pool UUID for traceability. */
+  pool_id: z.string().nullable(),
+  audited: z.boolean(),
+  why_recommended: z.string().min(40),
+});
+
+export type YieldCandidate = z.infer<typeof yieldCandidateSchema>;
+
+/**
+ * Full `discover_yields_by_intent` output.
+ *
+ * `discovery_source` records which path served the candidate set:
+ *   - `index_network`: Index CLI returned matched opportunities; we then
+ *     enriched/scored them against DefiLlama Yields.
+ *   - `fallback`: Index unavailable (no key, CLI not installed, login
+ *     required, or hard error) — we ran the DefiLlama Yields path directly.
+ *
+ * `parsed_intent` echoes the structured constraints so the MCP client can
+ * render "we interpreted your intent as: APY >= 5%, chain Base, audited".
+ *
+ * `index_network_used` is true if the live Index call was actually issued —
+ * even when `discovery_source = "fallback"`, this lets us record (in tests)
+ * that an attempted CLI invocation took place.
+ */
+export const yieldDiscoveryResultSchema = z.object({
+  discovery_source: z.enum(YIELD_DISCOVERY_SOURCES),
+  index_network_used: z.boolean(),
+  fallback_reason: z.string().nullable(),
+  parsed_intent: intentConstraintsSchema,
+  candidates: z.array(yieldCandidateSchema),
+  sources: z.array(z.string().url()).min(1),
+  generated_at: z.string().datetime(),
+});
+
+export type YieldDiscoveryResult = z.infer<typeof yieldDiscoveryResultSchema>;

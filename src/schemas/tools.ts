@@ -18,6 +18,7 @@ import {
   protocolRiskProfileSchema,
   riskScoreSchema,
   txRiskReportSchema,
+  yieldDiscoveryResultSchema,
 } from './domain.js';
 
 /**
@@ -173,3 +174,44 @@ export type GetRecentExploitsInput = z.infer<typeof getRecentExploitsInputSchema
 export const getRecentExploitsOutputSchema = exploitFeedSchema;
 
 export type GetRecentExploitsOutput = z.infer<typeof getRecentExploitsOutputSchema>;
+
+/* ------------------------------------------------------------------------- */
+/* discover_yields_by_intent                                                  */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Input shape for `discover_yields_by_intent`. Single natural-language string —
+ * the rule-based parser in `lib/intentParser.ts` extracts structured constraints
+ * (APY threshold, chain, asset, audited, no-rebase, real-yield-only). The
+ * extracted constraints are echoed in the response under `parsed_intent` so
+ * the MCP client can show how the parser interpreted the request.
+ *
+ * Limit and `limit_max` mirror `get_recent_exploits` — a hard ceiling on how
+ * many candidates we will return, capped at 25 so a runaway LLM call cannot
+ * pull the entire DefiLlama Yields directory.
+ */
+export const discoverYieldsByIntentInputShape = {
+  intent: z
+    .string()
+    .min(1)
+    .max(500)
+    .describe(
+      'Natural-language yield-discovery intent. Supported keywords: APY thresholds (`> N%`, `>= N%`), chains (`on Base`, `on Arbitrum`, `on Ethereum`), assets (`USDC`, `USDT`, `DAI`, `ETH`, `WETH`, `STETH`), `audited`, `audited within last N months`, `no rebase`, `stable`, `real yield`, `no emissions`. Example: "stable USDC yield > 5% on Base, audited".',
+    ),
+  limit: z
+    .number()
+    .int()
+    .min(1)
+    .max(25)
+    .optional()
+    .describe('Maximum number of candidates to return (1..25). Defaults to 5.'),
+} as const;
+
+export const discoverYieldsByIntentInputSchema = z.object(discoverYieldsByIntentInputShape);
+
+export type DiscoverYieldsByIntentInput = z.infer<typeof discoverYieldsByIntentInputSchema>;
+
+/** Output is the canonical YieldDiscoveryResult shape from `domain.ts`. */
+export const discoverYieldsByIntentOutputSchema = yieldDiscoveryResultSchema;
+
+export type DiscoverYieldsByIntentOutput = z.infer<typeof discoverYieldsByIntentOutputSchema>;
