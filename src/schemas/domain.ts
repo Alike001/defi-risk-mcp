@@ -275,3 +275,65 @@ export const protocolNotFoundErrorSchema = z.object({
 });
 
 export type ProtocolNotFoundError = z.infer<typeof protocolNotFoundErrorSchema>;
+
+/* ------------------------------------------------------------------------- */
+/* ExploitFeed — output of `get_recent_exploits`                              */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * A single exploit record. Per the BDD acceptance criteria each entry must
+ * have a non-empty `protocol` slug, a numeric `amount_usd`, a `source_url`,
+ * a ≥30-char `summary`, and an ISO-8601 `date`. Optional `chains` carries
+ * the EVM chain slugs the exploit affected (lower-cased) — used by the chain
+ * filter. `source` records which feed the entry came from so the deduper
+ * and downstream UIs can render attribution.
+ */
+export const EXPLOIT_FEED_SOURCES = ['rekt', 'blocksec'] as const;
+export type ExploitFeedSource = (typeof EXPLOIT_FEED_SOURCES)[number];
+
+export const exploitSchema = z.object({
+  /** ISO-8601 date in UTC ("YYYY-MM-DD" or full ISO 8601 timestamp). */
+  date: z
+    .string()
+    .min(10)
+    .refine((s) => !Number.isNaN(Date.parse(s)), { message: 'date must parse via Date.parse' }),
+  /** Best-effort protocol slug (lower-cased, hyphenated when multi-word). */
+  protocol: z.string().min(1),
+  /**
+   * USD loss estimate. `0` is permitted when the post is qualitative
+   * (governance attack, exit scam without a clean number) — this is
+   * preferable to fabricating a number.
+   */
+  amount_usd: z.number().min(0),
+  source_url: z.string().url(),
+  summary: z.string().min(30),
+  /**
+   * EVM chain slugs (lower-cased) the exploit affected. May be empty when
+   * no chain is mentioned in the source post — the filter treats empty as
+   * "unknown" rather than a positive signal. Multi-chain exploits keep all
+   * slugs.
+   */
+  chains: z.array(z.string().min(1)),
+  source: z.enum(EXPLOIT_FEED_SOURCES),
+});
+
+export type Exploit = z.infer<typeof exploitSchema>;
+
+/**
+ * Full ExploitFeed — output of `get_recent_exploits`. The tool returns this
+ * shape for both the empty (no exploits) and populated cases. `time_window_days`
+ * and `chain_filter` are echoed so the LLM client can render "showing exploits
+ * in the last N days [on chain X]". `sources_used` lists the upstream feeds
+ * that contributed any entry — used for citation symmetry with the rest of
+ * the tool surface and for honest documentation when one source is offline.
+ */
+export const exploitFeedSchema = z.object({
+  exploits: z.array(exploitSchema),
+  time_window_days: z.number().int().positive(),
+  chain_filter: z.string().nullable(),
+  sources_used: z.array(z.enum(EXPLOIT_FEED_SOURCES)),
+  /** When the response was generated. ISO-8601 UTC. */
+  generated_at: z.string().datetime(),
+});
+
+export type ExploitFeed = z.infer<typeof exploitFeedSchema>;

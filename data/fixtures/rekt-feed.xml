@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Real items captured from https://rekt.news/rss/feed.xml on 2026-05-05.
+  Older items (Sep–Dec 2024) are sourced from the Wayback snapshot:
+    https://web.archive.org/web/20241216182528if_/https://rekt.news/rss/feed.xml
+  Trimmed to a representative slice that exercises the parser, window
+  filter, chain inference and protocol/amount extraction. We do NOT alter
+  any title / link / pubDate / description string — those are verbatim so
+  the parser tests reflect production feed shape.
+-->
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>Rekt</title>
+        <link>https://www.rekt.news</link>
+        <description>Investigative journalism &amp; creative commentary</description>
+        <lastBuildDate>Mon, 04 May 2026 18:42:50 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>Feed for Node.js</generator>
+        <language>en</language>
+        <item>
+            <title><![CDATA[Radiant Capital - Rekt II]]></title>
+            <link>https://www.rekt.news/radiant-capital-rekt2</link>
+            <guid>https://www.rekt.news/radiant-capital-rekt2</guid>
+            <pubDate>Thu, 17 Oct 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Radiant Capital gets a $53M haircut. Thought multi-sigs were safe? Think again. Radiant's "robust" 3/11 setup crumbled like a house of cards. Exploited twice in a year on Arbitrum, this multi-chain lender shows once more that opsec, not code, is often the weakest link.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Polter Finance]]></title>
+            <link>https://www.rekt.news/polter-finance-rekt</link>
+            <guid>https://www.rekt.news/polter-finance-rekt</guid>
+            <pubDate>Mon, 18 Nov 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[After losing roughly $8.7 million to a textbook case of oracle manipulation, Polter Finance is scrambling to clean up the mess. Their unaudited protocol left key contracts wide open on Fantom, and an attacker walked away rich.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[DeltaPrime - Rekt II]]></title>
+            <link>https://www.rekt.news/deltaprime-rekt2</link>
+            <guid>https://www.rekt.news/deltaprime-rekt2</guid>
+            <pubDate>Mon, 11 Nov 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Audited multiple times, hacked twice in two months. DeltaPrime loses another $4.85M after ignoring explicit warnings about admin key security. Like leaving your front door unlocked - on Arbitrum and Avalanche - in a bad neighborhood.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Tapioca DAO - Rekt]]></title>
+            <link>https://www.rekt.news/tapioca-dao-rekt</link>
+            <guid>https://www.rekt.news/tapioca-dao-rekt</guid>
+            <pubDate>Mon, 21 Oct 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Another day, another private key theft, another protocol rekt. Tapioca DAO on Arbitrum suffers a roughly $4.4 million loss in a private key compromise. Some funds were partially recovered after negotiation with the attacker.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Penpie - Rekt]]></title>
+            <link>https://www.rekt.news/penpie-rekt</link>
+            <guid>https://www.rekt.news/penpie-rekt</guid>
+            <pubDate>Wed, 04 Sep 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[The crypto world never sleeps and neither do its hackers. In the latest episode of Who Wants to Be a Millionaire - DeFi Edition, Penpie has found itself on the wrong end of a $27 million reentrancy attack on Pendle markets, leaving Ethereum and Arbitrum users counting their losses.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[LiFi/Jumper - Rekt]]></title>
+            <link>https://www.rekt.news/lifi-rekt2</link>
+            <guid>https://www.rekt.news/lifi-rekt2</guid>
+            <pubDate>Tue, 16 Jul 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Infinite approvals... the ultimate leap of faith strikes again. LiFi protocol lost $9.73M to an attack draining addresses that had previously approved infinite spending on Ethereum, Arbitrum, Optimism, Polygon and Base.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Rho Market - Rekt]]></title>
+            <link>https://www.rekt.news/rho-market-rekt</link>
+            <guid>https://www.rekt.news/rho-market-rekt</guid>
+            <pubDate>Fri, 19 Jul 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[An oracle's misconfiguration turns into a $7.5 million windfall for an alert MEV bot. What began as a simple misstep in Rho Market's oracle configuration on Scroll turned into a six-figure five-figure-fee MEV bonanza.]]></description>
+        </item>
+    </channel>
+</rss>
