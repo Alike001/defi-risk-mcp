@@ -52,7 +52,7 @@ export type SupportedPlatform = 'darwin' | 'win32' | 'linux';
 export function defaultServerEntry(): McpServerEntry {
   return {
     command: 'npx',
-    args: ['-y', '-p', '@defi-risk/mcp', 'defi-risk-mcp'],
+    args: ['-y', '-p', '@alike001/defi-risk-mcp', 'defi-risk-mcp'],
     env: {
       ALCHEMY_API_KEY: '',
       ETHERSCAN_API_KEY: '',

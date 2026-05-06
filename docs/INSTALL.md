@@ -45,7 +45,7 @@ launch and cache it.
      "mcpServers": {
        "defi-risk": {
          "command": "npx",
-         "args": ["-y", "-p", "@defi-risk/mcp", "defi-risk-mcp"],
+         "args": ["-y", "-p", "@alike001/defi-risk-mcp", "defi-risk-mcp"],
          "env": {
            "ALCHEMY_API_KEY": "",
            "ETHERSCAN_API_KEY": "",
@@ -190,7 +190,7 @@ defi-risk-mcp v0.1.0 ready (stdio)
    `node --version` from the same shell.
 2. For the **manual install** path, confirm `dist/index.js` exists and is
    executable: `ls -l dist/index.js`. Re-run `pnpm run build` if not.
-3. For the **npx** path, confirm `npx -y -p @defi-risk/mcp defi-risk-mcp`
+3. For the **npx** path, confirm `npx -y -p @alike001/defi-risk-mcp defi-risk-mcp`
    runs and prints `defi-risk-mcp v0.1.0 ready (stdio)` to stderr before you
    send EOF.
 4. Run `scripts/verify-claude-desktop.sh` from a terminal — it locates the
