@@ -1,0 +1,71 @@
+# defi-risk-mcp — npm publish allow-list is governed by `package.json#files`,
+# so this ignore file is belt-and-suspenders for anything that might slip past
+# the whitelist. Keep both in sync.
+
+# Source — only the compiled output ships
+src/
+**/*.test.ts
+**/*.test.js
+**/*.tsbuildinfo
+
+# Coverage + tooling artifacts
+coverage/
+.nyc_output/
+.cache/
+.turbo/
+
+# Repo-internal docs and research
+docs/
+research/
+landing/
+.audit/
+.claude/
+.github/
+screenshots/
+
+# Build / dev tooling configs
+tsconfig.json
+biome.json
+vitest.config.ts
+.eslintrc*
+.prettierrc*
+.editorconfig
+
+# Local env + secrets
+.env
+.env.*
+!.env.example
+
+# Manuscripts / meta
+AGENTS.md
+CLAUDE.md
+SPEC.md
+ROADMAP.md
+CHANGELOG.md
+CONTRIBUTING.md
+PRD.md
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+._*
+
+# Tests fixtures (the runtime data/ dir is whitelisted in package.json#files,
+# but unit-test-only fixtures should never ship)
+data/fixtures/
+**/__tests__/
+**/__mocks__/
+
+# Repo-only example config — docs/INSTALL.md and bin/install both regenerate it
+claude-desktop-config-example.json
+
+# Lockfile (npm uses package.json + the registry; keeping pnpm-lock out of the
+# tarball is consistent with most published TS packages)
+pnpm-lock.yaml
+
+# Worktrees + scratch
+../worktrees/
+scripts/
