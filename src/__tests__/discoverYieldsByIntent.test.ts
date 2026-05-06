@@ -272,9 +272,15 @@ describe('story-tool-discover-yields-by-intent', () => {
       );
 
       yieldDiscoveryResultSchema.parse(result);
-      expect(result.discovery_source).toBe('fallback');
+      // Router refactor (story #8): the explicit "no Index, no Brave" path now
+      // emits `defillama_only`. The legacy `'fallback'` umbrella value remains
+      // in the schema enum but the router never picks it.
+      expect(result.discovery_source).toBe('defillama_only');
       expect(result.index_network_used).toBe(false);
-      expect(result.fallback_reason).toBe('INDEX_NETWORK_KEY not set');
+      // The router concatenates per-path reasons with `; ` so we match a
+      // substring rather than the exact string the old single-path inline
+      // implementation emitted.
+      expect(result.fallback_reason).toMatch(/INDEX_NETWORK_KEY not set/);
       expect(cliCalled).toBe(false);
 
       // Schema still produces ≥1 candidate (Morpho/Aave/Fluid all on Base + audited)
@@ -591,7 +597,10 @@ describe('story-tool-discover-yields-by-intent', () => {
         },
       );
       yieldDiscoveryResultSchema.parse(result);
-      expect(result.discovery_source).toBe('fallback');
+      // Router refactor (story #8): when Index errors and Brave is unset, the
+      // router falls through to the DefiLlama floor — `discovery_source` is
+      // now the explicit `defillama_only` rather than the legacy umbrella.
+      expect(result.discovery_source).toBe('defillama_only');
       expect(result.fallback_reason).toMatch(/CLI unreachable/);
       expect(result.candidates.length).toBeGreaterThanOrEqual(1);
     });

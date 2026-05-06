@@ -344,14 +344,40 @@ export type ExploitFeed = z.infer<typeof exploitFeedSchema>;
 /* ------------------------------------------------------------------------- */
 
 /**
- * Discovery source for a yield search. `index_network` means the live Index
- * Network agent matchmaker produced (or seeded) the candidate set; `fallback`
- * means we ran the DefiLlama Yields path directly because Index was unset or
- * errored. The MCP client should surface this so the user understands which
- * path actually ran (judge-fit signal — see story file).
+ * Discovery source for a yield search. Records which path served the candidate
+ * set (judge-fit signal — see story file + ADR-006 for path priority).
+ *
+ *   - `index_network`: Index CLI returned matched opportunities; we then
+ *     enriched/scored them against DefiLlama Yields (Path 2 per ADR-006).
+ *   - `brave`: Index unavailable; the Brave Search REST API surfaced
+ *     yield-candidate URLs which we then resolved via DefiLlama Yields. Marked
+ *     candidates carry `data_source: "brave_inferred"` so callers know the
+ *     selection signal is heuristic (Path 2.5 — optional, only when
+ *     `BRAVE_SEARCH_API_KEY` is set).
+ *   - `defillama_only`: both upstreams unavailable / unset; we ran the
+ *     DefiLlama Yields path directly as the absolute floor (Path 3, always
+ *     works — no key required).
+ *   - `fallback`: legacy umbrella value preserved for backward compatibility
+ *     with the original story-tool-discover-yields-by-intent (#7) tests. The
+ *     router never emits this — only the three explicit values above.
  */
-export const YIELD_DISCOVERY_SOURCES = ['index_network', 'fallback'] as const;
+export const YIELD_DISCOVERY_SOURCES = [
+  'index_network',
+  'brave',
+  'defillama_only',
+  'fallback',
+] as const;
 export type YieldDiscoverySource = (typeof YIELD_DISCOVERY_SOURCES)[number];
+
+/**
+ * Per-candidate provenance flag. Most candidates come straight from DefiLlama
+ * Yields (`defillama`). When the Brave Search path is the path selector, we
+ * mark the surviving candidates `brave_inferred` so the MCP client can render
+ * "this protocol surfaced via web search heuristic — risk metrics still come
+ * from DefiLlama".
+ */
+export const YIELD_CANDIDATE_DATA_SOURCES = ['defillama', 'brave_inferred'] as const;
+export type YieldCandidateDataSource = (typeof YIELD_CANDIDATE_DATA_SOURCES)[number];
 
 /**
  * Structured constraints extracted by the rule-based intent parser. Every
@@ -411,6 +437,16 @@ export const yieldCandidateSchema = z.object({
   pool_id: z.string().nullable(),
   audited: z.boolean(),
   why_recommended: z.string().min(40),
+  /**
+   * Provenance of the candidate selection signal. `defillama` is the default —
+   * the candidate was selected directly from DefiLlama Yields (with optional
+   * Index Network biasing). `brave_inferred` means the Brave Search path
+   * surfaced this protocol via heuristic URL extraction; risk metrics still
+   * come from DefiLlama, but the LLM should disclose the heuristic origin to
+   * the user. Optional for back-compat with the #7 candidate shape — defaults
+   * to `defillama` on the wire.
+   */
+  data_source: z.enum(YIELD_CANDIDATE_DATA_SOURCES).optional(),
 });
 
 export type YieldCandidate = z.infer<typeof yieldCandidateSchema>;
@@ -418,18 +454,17 @@ export type YieldCandidate = z.infer<typeof yieldCandidateSchema>;
 /**
  * Full `discover_yields_by_intent` output.
  *
- * `discovery_source` records which path served the candidate set:
- *   - `index_network`: Index CLI returned matched opportunities; we then
- *     enriched/scored them against DefiLlama Yields.
- *   - `fallback`: Index unavailable (no key, CLI not installed, login
- *     required, or hard error) — we ran the DefiLlama Yields path directly.
+ * `discovery_source` records which path served the candidate set — see the
+ * `YIELD_DISCOVERY_SOURCES` doc above for the full enum (index_network /
+ * brave / defillama_only, plus the legacy `fallback` umbrella retained for
+ * back-compat with story #7's existing tests).
  *
  * `parsed_intent` echoes the structured constraints so the MCP client can
  * render "we interpreted your intent as: APY >= 5%, chain Base, audited".
  *
  * `index_network_used` is true if the live Index call was actually issued —
- * even when `discovery_source = "fallback"`, this lets us record (in tests)
- * that an attempted CLI invocation took place.
+ * even when discovery_source falls back, this lets us record (in tests) that
+ * an attempted CLI invocation took place.
  */
 export const yieldDiscoveryResultSchema = z.object({
   discovery_source: z.enum(YIELD_DISCOVERY_SOURCES),
