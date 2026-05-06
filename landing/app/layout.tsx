@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'defi-risk-mcp — Give Claude DeFi-grade risk awareness',
   description:
-    'An MCP server that synthesizes audits, exploits, oracles, MEV — exposed as 8 tools any AI agent can call. Built for Encode DeFi Mini Hack 2026.',
+    'An MCP server that synthesizes audits, exploits, oracles, MEV — exposed as 7 tools any AI agent can call. Built for Encode DeFi Mini Hack 2026.',
   metadataBase: new URL('https://defi-risk-mcp.vercel.app'),
   openGraph: {
     title: 'defi-risk-mcp',

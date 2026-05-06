@@ -139,7 +139,7 @@ export default function Home() {
           Give Claude DeFi-grade risk awareness.
         </h1>
         <p className="max-w-2xl text-base leading-relaxed text-[#A3A3A3] sm:text-lg">
-          An MCP server that synthesizes audits, exploits, oracles, MEV — exposed as 8 tools any AI agent can call.
+          An MCP server that synthesizes audits, exploits, oracles, MEV — exposed as 7 tools any AI agent can call.
         </p>
 
         <div className="mt-4 max-w-2xl">
