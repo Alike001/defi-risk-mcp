@@ -13,6 +13,7 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerHealthCheckTool } from './tools/_placeholder.js';
+import { registerGetPositionRiskTool } from './tools/getPositionRisk.js';
 import { createStdioTransport } from './transport.js';
 
 export const SERVER_NAME = 'defi-risk-mcp';
@@ -25,6 +26,7 @@ export function createServer(): McpServer {
   });
 
   registerHealthCheckTool(server);
+  registerGetPositionRiskTool(server);
 
   return server;
 }
