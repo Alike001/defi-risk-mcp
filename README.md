@@ -67,7 +67,7 @@ The MCP server is installed by registering it as a tool server in your MCP-compl
 ### Quick install (one-liner)
 
 ```bash
-npx -y -p @defi-risk/mcp defi-risk-mcp-install
+npx -y -p @alike001/defi-risk-mcp defi-risk-mcp-install
 ```
 
 This writes a `defi-risk` entry into your Claude Desktop config (creating the file if it does not exist), preserving every other MCP server you already have. If a `defi-risk` entry is already present, the script asks before overwriting; pass `--force` to skip the prompt.
@@ -81,7 +81,7 @@ If you prefer to edit the config yourself, paste this block into `claude_desktop
   "mcpServers": {
     "defi-risk": {
       "command": "npx",
-      "args": ["-y", "-p", "@defi-risk/mcp", "defi-risk-mcp"],
+      "args": ["-y", "-p", "@alike001/defi-risk-mcp", "defi-risk-mcp"],
       "env": {
         "ALCHEMY_API_KEY": "",
         "ETHERSCAN_API_KEY": "",

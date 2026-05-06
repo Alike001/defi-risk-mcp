@@ -10,7 +10,7 @@
     "(A) npx — recommended for end users; no clone required.",
     "    Replace this block's `command` + `args` with:",
     "      \"command\": \"npx\",",
-    "      \"args\": [\"-y\", \"-p\", \"@defi-risk/mcp\", \"defi-risk-mcp\"]",
+    "      \"args\": [\"-y\", \"-p\", \"@alike001/defi-risk-mcp\", \"defi-risk-mcp\"]",
     "(B) Local build — recommended for contributors. The shipped example uses",
     "    this pattern; replace ABSOLUTE_PATH_TO_REPO with the path on your box."
   ],

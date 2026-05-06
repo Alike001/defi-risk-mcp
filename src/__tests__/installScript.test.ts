@@ -62,10 +62,10 @@ describe('install script — pure helpers', () => {
   });
 
   describe('defaultServerEntry', () => {
-    it('uses npx as the command and references @defi-risk/mcp', () => {
+    it('uses npx as the command and references @alike001/defi-risk-mcp', () => {
       const entry = defaultServerEntry();
       expect(entry.command).toBe('npx');
-      expect(entry.args).toContain('@defi-risk/mcp');
+      expect(entry.args).toContain('@alike001/defi-risk-mcp');
       expect(entry.args).toContain('defi-risk-mcp');
     });
 
