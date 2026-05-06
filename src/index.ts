@@ -13,6 +13,7 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerHealthCheckTool } from './tools/_placeholder.js';
+import { registerDiscoverYieldsByIntentTool } from './tools/discoverYieldsByIntent.js';
 import { registerExplainProtocolRiskTool } from './tools/explainProtocolRisk.js';
 import { registerGetPositionRiskTool } from './tools/getPositionRisk.js';
 import { registerGetRecentExploitsTool } from './tools/getRecentExploits.js';
@@ -33,6 +34,7 @@ export function createServer(): McpServer {
   registerSimulateTxRiskTool(server);
   registerExplainProtocolRiskTool(server);
   registerGetRecentExploitsTool(server);
+  registerDiscoverYieldsByIntentTool(server);
 
   return server;
 }

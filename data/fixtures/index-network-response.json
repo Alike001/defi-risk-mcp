@@ -1,0 +1,55 @@
+{
+  "_comment": "Fixture mirroring the JSON envelope `index opportunity discover \"<query>\" --json --token <key>` emits, captured against `@indexnetwork/cli` v0.10.3 (probed Day 1, 2026-05-06). Top level is `{success, data, error}` per the CLI source (`src/api.client.ts` + `src/opportunity.command.ts`). The CLI's `data` field is heterogeneous — sometimes an opportunities array, sometimes an envelope object with `{message, opportunities}`. We capture the most useful shape (array of opportunity records carrying protocol/chain/symbol/apy/url) so `lib/indexNetwork.ts` can flow them into the candidate pipeline.",
+  "success": true,
+  "data": [
+    {
+      "id": "opp-7c1a-9f3b-base-usdc",
+      "title": "Audited stable USDC yield on Base via Morpho Blue",
+      "description": "Morpho Blue's STEAKUSDC vault on Base — audited (OpenZeppelin + Spearbit), $470M TVL, 4.0% real APY (apyBase, no inflationary emissions per DefiLlama).",
+      "score": 0.92,
+      "protocol": "morpho-blue",
+      "project": "morpho-blue",
+      "chain": "Base",
+      "symbol": "STEAKUSDC",
+      "apy": 3.99,
+      "real_yield": 3.99,
+      "url": "https://app.morpho.org/base/vault/0xbeef026f747a48d2c0e1d3a4cc6d2e2c7b3a1c8f/steakusdc",
+      "sources": [
+        "https://app.morpho.org/",
+        "https://blog.openzeppelin.com/morpho-blue-audit"
+      ]
+    },
+    {
+      "id": "opp-92ad-4416-base-usdc",
+      "title": "Aave v3 USDC supply on Base — institutional liquidity",
+      "description": "Aave v3 USDC supply pool on Base with $1B+ TVL, audited by Trail of Bits + OpenZeppelin + Code4rena. Mixed real + inflationary APY.",
+      "score": 0.81,
+      "protocol": "aave-v3",
+      "project": "aave-v3",
+      "chain": "Base",
+      "symbol": "USDC",
+      "apy": 5.4,
+      "real_yield": 4.1,
+      "url": "https://app.aave.com/?marketName=proto_base_v3",
+      "sources": [
+        "https://aave.com/",
+        "https://github.com/aave/aave-v3-core/tree/master/audits"
+      ]
+    },
+    {
+      "id": "opp-0011-cccd-base-usdc",
+      "title": "Fluid Lending USDC on Base — newer protocol, lower TVL",
+      "description": "Fluid Lending USDC pool on Base. Audit cache hit (Spearbit + Cantina). Smaller $30M TVL means higher concentration risk.",
+      "score": 0.71,
+      "protocol": "fluid-lending",
+      "project": "fluid-lending",
+      "chain": "Base",
+      "symbol": "USDC",
+      "apy": 7.2,
+      "real_yield": 4.5,
+      "url": "https://fluid.io/lending",
+      "sources": ["https://fluid.io/lending"]
+    }
+  ],
+  "error": null
+}
