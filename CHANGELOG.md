@@ -7,6 +7,10 @@ and the project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-05-13
+
+Documentation-only release. No code or tool-surface changes — safe to upgrade.
+
 ### Added
 - README "What you get" section — user-outcome framing (before/after, four concrete use cases) so first-time readers can decide whether to install in under 30 seconds.
 - README "Quick start" section — one-command install path, restart instruction, and a verification prompt to run against Claude.
@@ -37,5 +41,6 @@ First public release on npm — published as `@alike001/defi-risk-mcp`.
 - Built for the [Encode DeFi Mini Hack 2026](https://www.encodeclub.com/programmes/defi-mini-hack).
 - Pre-1.0 — the tool surface is stable enough to ship but may evolve. Track changes in this file before upgrading minor versions.
 
-[Unreleased]: https://github.com/Alike001/defi-risk-mcp/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Alike001/defi-risk-mcp/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/Alike001/defi-risk-mcp/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Alike001/defi-risk-mcp/releases/tag/v0.1.0

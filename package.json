@@ -1,6 +1,6 @@
 {
   "name": "@alike001/defi-risk-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server: synthesizes DeFi risk across audits, exploits, oracles, MEV. For Claude Desktop and any MCP-compliant agent.",
   "license": "MIT",
   "author": "Alike001 Hammed Ali Oyeleye <hammedoye10@gmail.com> (https://github.com/Alike001)",
